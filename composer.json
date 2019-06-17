@@ -1,0 +1,25 @@
+{
+    "name": "andreykurmel/tablda_data_receiver",
+    "description": "Component for receiving data in TablDA Apps.",
+    "keywords": ["tablda"],
+    "type": "library",
+    "authors": [
+        {
+            "name": "AndreyKurmel",
+            "email": "kurmeldeveloper@gmail.com",
+            "homepage": "https://github.com/andreykurmel/tablda_data_receiver",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.1",
+        "laravel/framework": "^5.6",
+        "sofa/eloquence-mappable": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tablda\\DataReceiver\\": "src"
+        }
+    }
+}
