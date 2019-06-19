@@ -12,4 +12,11 @@ interface TabldaDataInterface
      * @return mixed
      */
     public function getQuery(string $table);
+
+    /**
+     * Get data for current app in 'correspondence tables'.
+     *
+     * @return array
+     */
+    public function appDatas();
 }

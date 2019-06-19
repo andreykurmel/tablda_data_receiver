@@ -90,6 +90,16 @@ class TabldaDataReceiver implements TabldaDataInterface
     }
 
     /**
+     * Get data for current app in 'correspondence tables'.
+     *
+     * @return array
+     */
+    public function appDatas()
+    {
+        return (array)$this->app;
+    }
+
+    /**
      * Get mappings from cache or build them.
      *
      * @param string $table
