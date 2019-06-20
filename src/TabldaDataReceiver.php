@@ -49,7 +49,7 @@ class TabldaDataReceiver implements TabldaDataInterface
     private function setAppRecord() {
         $this->app = DB::connection($this->connection_sys)
             ->table($this->apps_tb)
-            ->where('name', env('APP_NAME'))
+            ->where('name', env('TABLDA_APP_NAME'))
             ->first();
 
         if (!$this->app) {

@@ -13,6 +13,8 @@ Installation:
 
 /* required */
 
+TABLDA_APP_NAME={app name in 'correspondence apps'}
+
 TABLDA_SYS_CONN=tablda_sys
 
 TABLDA_DATA_CONN=tablda_data
