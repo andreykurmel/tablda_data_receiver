@@ -9,9 +9,9 @@ interface TabldaDataInterface
      * Get Mapable-Eloquent Query Builder.
      *
      * @param string $table
-     * @return mixed
+     * @return DataTableReceiver
      */
-    public function getQuery(string $table);
+    public function tableReceiver(string $table);
 
     /**
      * Get data for current app in 'correspondence tables'.

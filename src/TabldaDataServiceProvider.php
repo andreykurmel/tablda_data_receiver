@@ -16,5 +16,6 @@ class TabldaDataServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(TabldaDataInterface::class, TabldaDataReceiver::class);
+        $this->app->bind(DataTableInterface::class, DataTableReceiver::class);
     }
 }

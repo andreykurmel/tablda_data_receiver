@@ -10,19 +10,9 @@ class TabldaTable extends Model
 {
     use Eloquence, Mappable;
 
-    static protected $s_maps = [];
+    public $timestamps = false;
 
     protected $maps = [];
-
-    /**
-     * TabldaTable constructor.
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->applyMaps();
-    }
 
     /**
      * Set static 'maps' and apply.
@@ -32,19 +22,21 @@ class TabldaTable extends Model
      */
     public function setMaps(array $maps)
     {
-        static::$s_maps = $maps;
-        $this->applyMaps();
+        $this->maps = $maps;
+        $this->setAppends(array_keys($this->maps));
+        $this->setVisible(array_keys($this->maps));
 
         return $this;
     }
 
     /**
-     * Apply active static 'maps' to current Model.
+     * Get Model's maps.
+     *
+     * @return array
      */
-    private function applyMaps()
+    public function getMaps()
     {
-        $this->maps = static::$s_maps;
-        $this->setAppends(array_keys($this->maps));
-        $this->setVisible(array_keys($this->maps));
+        return $this->maps;
     }
+
 }

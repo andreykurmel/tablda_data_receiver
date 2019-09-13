@@ -28,7 +28,8 @@ class TabldaDataReceiver implements TabldaDataInterface
      *
      * @throws \Exception
      */
-    private function setSettings() {
+    private function setSettings()
+    {
         $this->connection_sys = env('TABLDA_SYS_CONN');
         $this->connection_data = env('TABLDA_DATA_CONN');
 
@@ -46,7 +47,8 @@ class TabldaDataReceiver implements TabldaDataInterface
      *
      * @throws \Exception
      */
-    private function setAppRecord() {
+    private function setAppRecord()
+    {
         $this->app = DB::connection($this->connection_sys)
             ->table($this->apps_tb)
             ->where('name', env('TABLDA_APP_NAME'))
@@ -62,7 +64,8 @@ class TabldaDataReceiver implements TabldaDataInterface
      *
      * @throws \Exception
      */
-    private function configDataConnection() {
+    private function configDataConnection()
+    {
         $data = $this->connection_data;
         config([
             "database.connections.$data.host" => ($this->app->host ?: env('DB_HOST', '127.0.0.1')),
@@ -76,27 +79,18 @@ class TabldaDataReceiver implements TabldaDataInterface
      * Get Query with field mapping.
      *
      * @param string $table
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return DataTableReceiver
      */
-    public function getQuery(string $table)
+    public function tableReceiver(string $table)
     {
         $tb = $this->getTableWithMaps($table);
 
-        return (new TabldaTable())
+        $model = (new TabldaTable())
             ->setConnection($this->connection_data)
             ->setTable($tb['data_table'])
-            ->setMaps($tb['field_maps'])
-            ->newQuery();
-    }
+            ->setMaps($tb['field_maps']);
 
-    /**
-     * Get data for current app in 'correspondence tables'.
-     *
-     * @return array
-     */
-    public function appDatas()
-    {
-        return (array)$this->app;
+        return app()->make(DataTableInterface::class, ['model' => $model]);
     }
 
     /**
@@ -119,6 +113,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      *
      * @param string $table
      * @return array
+     * @throws \Exception
      */
     private function buildMaps(string $table)
     {
@@ -128,6 +123,10 @@ class TabldaDataReceiver implements TabldaDataInterface
             ->where('app_table', $table)
             ->first();
 
+        if (!$app_table) {
+            throw new \Exception('Table not found in "CorrespondenceTables"');
+        }
+
         $app_fields = DB::connection($this->connection_sys)
             ->table($this->fields_tb)
             ->where('correspondence_app_id', $this->app->id)
@@ -135,14 +134,24 @@ class TabldaDataReceiver implements TabldaDataInterface
             ->whereNotNull('data_field')
             ->get();
 
-        $maps = [];
+        $maps = ['ID' => 'id'];
         foreach ($app_fields as $app_field) {
             $maps[$app_field->app_field] = $app_field->data_field;
         }
 
         return [
             'data_table' => $app_table->data_table,
-            'field_maps' => $maps,
+            'field_maps' => array_unique($maps),
         ];
+    }
+
+    /**
+     * Get data for current app in 'correspondence tables'.
+     *
+     * @return array
+     */
+    public function appDatas()
+    {
+        return (array)$this->app;
     }
 }
