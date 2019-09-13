@@ -36,13 +36,10 @@ Example of using:
 
 //get data:
 
-app(TabldaDataInterface::class)
-            ->getQuery('users_table')
-            ->get()
+$table = app(TabldaDataInterface::class)->tableReceiver('members');
+$table->where('ID', 1)->get();
             
 //update data:
 
-app(TabldaDataInterface::class)
-            ->getQuery('users_table')
-            ->where('db_SRC', 138)
-            ->update(['field' => 12])
+$table = app(TabldaDataInterface::class)->tableReceiver('members');
+$table->where('ID', 1)->update(['field' => 12]);
