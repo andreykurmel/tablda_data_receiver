@@ -116,9 +116,9 @@ class DataTableReceiver implements DataTableInterface
         $maps = $this->model->getMaps();
         $mapped_data = [];
         foreach ($input as $key => $val) {
-            $mapper = $maps[$key] ?? null;
+            $mapper = $maps[ strtolower($key) ] ?? null;
             if ($mapper) {
-                $mapped_data[$mapper] = $val;
+                $mapped_data[ strtolower($mapper) ] = $val;
             }
         }
         return $mapped_data;
@@ -133,11 +133,11 @@ class DataTableReceiver implements DataTableInterface
      */
     private function map_column(string $column) {
         $maps = $this->model->getMaps();
-        $mapped = $maps[$column] ?? null;
+        $mapped = $maps[ strtolower($column) ] ?? null;
         if (!$mapped) {
             throw new \Exception('Column not present in CorrespondenceFields');
         }
-        return $mapped;
+        return strtolower($mapped);
     }
 
 

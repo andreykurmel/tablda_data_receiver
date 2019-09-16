@@ -81,7 +81,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      * @param string $table
      * @return DataTableReceiver
      */
-    public function tableReceiver(string $table)
+    public function tableReceiver(string $table, bool $no_cache = false)
     {
         $tb = $this->getTableWithMaps($table);
 
@@ -99,9 +99,9 @@ class TabldaDataReceiver implements TabldaDataInterface
      * @param string $table
      * @return mixed
      */
-    private function getTableWithMaps(string $table)
+    private function getTableWithMaps(string $table, bool $no_cache = false)
     {
-        if (empty($this->tables_cache[$table])) {
+        if ($no_cache || empty($this->tables_cache[$table])) {
             $this->tables_cache[$table] = $this->buildMaps($table);
         }
 
@@ -136,12 +136,12 @@ class TabldaDataReceiver implements TabldaDataInterface
 
         $maps = ['ID' => 'id'];
         foreach ($app_fields as $app_field) {
-            $maps[$app_field->app_field] = $app_field->data_field;
+            $maps[strtolower($app_field->app_field)] = strtolower($app_field->data_field);
         }
 
         return [
             'data_table' => $app_table->data_table,
-            'field_maps' => array_unique($maps),
+            'field_maps' => $maps,
         ];
     }
 
