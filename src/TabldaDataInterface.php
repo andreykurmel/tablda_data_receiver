@@ -6,6 +6,13 @@ namespace Tablda\DataReceiver;
 interface TabldaDataInterface
 {
     /**
+     * TabldaDataInterface constructor.
+     *
+     * @param array $settings
+     */
+    public function __construct(array $settings = []);
+
+    /**
      * Get Mapable-Eloquent Query Builder.
      *
      * @param string $table

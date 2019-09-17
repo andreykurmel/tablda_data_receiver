@@ -15,9 +15,16 @@ class TabldaDataReceiver implements TabldaDataInterface
 
     protected $app;
     protected $tables_cache = [];
+    protected $settings = [];
 
-    public function __construct(array $settings = null)
+    /**
+     * TabldaDataReceiver constructor.
+     *
+     * @param array $settings
+     */
+    public function __construct(array $settings = [])
     {
+        $this->settings = $settings;
         $this->setSettings();
         $this->setAppRecord();
         $this->configDataConnection();
@@ -49,14 +56,21 @@ class TabldaDataReceiver implements TabldaDataInterface
      */
     private function setAppRecord()
     {
+        $app_name = $this->settings['TABLDA_APP_NAME'] ?? env('TABLDA_APP_NAME');
         $this->app = DB::connection($this->connection_sys)
             ->table($this->apps_tb)
-            ->where('name', env('TABLDA_APP_NAME'))
+            ->where('name', $app_name)
             ->first();
 
         if (!$this->app) {
             throw new \Exception('Record for Tablda application not found.');
         }
+
+        $this->app->_tables = DB::connection($this->connection_sys)
+            ->table($this->tables_tb)
+            ->where('correspondence_app_id', $this->app->id)
+            ->get()
+            ->toArray();
     }
 
     /**
