@@ -35,6 +35,11 @@ interface DataTableInterface
     public function whereIn($column, $values, $boolean = 'and', $not = false);
 
     /**
+     * @return $this
+     */
+    public function distinct();
+
+    /**
      * @return array
      */
     public function get();

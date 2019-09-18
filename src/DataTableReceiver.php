@@ -59,6 +59,17 @@ class DataTableReceiver implements DataTableInterface
     }
 
     /**
+     * Set Distinct to the query.
+     *
+     * @return $this
+     */
+    public function distinct()
+    {
+        $this->builder->distinct();
+        return $this;
+    }
+
+    /**
      * Get Data.
      *
      * @return array
