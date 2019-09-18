@@ -93,7 +93,6 @@ class DataTableReceiver implements DataTableInterface
         foreach ($models as $m) {
             $m->setMaps( $this->model->getMaps() );
         }
-        dd($models);
         return $models->toArray();
     }
 
