@@ -59,7 +59,7 @@ class TabldaDataReceiver implements TabldaDataInterface
         $app_name = $this->settings['TABLDA_APP_NAME'] ?? env('TABLDA_APP_NAME');
         $this->app = DB::connection($this->connection_sys)
             ->table($this->apps_tb)
-            ->where('name', $app_name)
+            ->where('code', $app_name)
             ->first();
 
         if (!$this->app) {
