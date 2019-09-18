@@ -3,7 +3,7 @@
     "description": "Component for receiving data in TablDA Apps.",
     "keywords": ["tablda"],
     "type": "library",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "authors": [
         {
             "name": "AndreyKurmel",

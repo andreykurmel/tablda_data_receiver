@@ -40,6 +40,12 @@ interface DataTableInterface
     public function distinct();
 
     /**
+     * @param string $column
+     * @return $this
+     */
+    public function select(string $column);
+
+    /**
      * @return array
      */
     public function get();

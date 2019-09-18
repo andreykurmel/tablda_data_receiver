@@ -70,6 +70,19 @@ class DataTableReceiver implements DataTableInterface
     }
 
     /**
+     * Set the columns to be selected.
+     *
+     * @param string $column
+     * @return $this
+     */
+    public function select(string $column)
+    {
+        $mapped = $this->map_column($column);
+        $this->builder->select($mapped);
+        return $this;
+    }
+
+    /**
      * Get Data.
      *
      * @return array
@@ -80,6 +93,7 @@ class DataTableReceiver implements DataTableInterface
         foreach ($models as $m) {
             $m->setMaps( $this->model->getMaps() );
         }
+        dd($models);
         return $models->toArray();
     }
 
