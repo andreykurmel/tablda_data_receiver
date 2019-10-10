@@ -20,7 +20,10 @@ class TabldaDataReceiver implements TabldaDataInterface
     /**
      * TabldaDataReceiver constructor.
      *
-     * @param array $settings
+     * @param array $settings : [
+     *      'TABLDA_APP_NAME' => string // replace env('TABLDA_APP_NAME') if needed
+     *      'case_sens' => bool // case sensitive field names or not
+     * ]
      */
     public function __construct(array $settings = [])
     {
@@ -95,7 +98,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      * @param string $table
      * @return DataTableReceiver
      */
-    public function tableReceiver(string $table, bool $no_cache = false)
+    public function tableReceiver(string $table)
     {
         $tb = $this->getTableWithMaps($table);
 
@@ -104,13 +107,17 @@ class TabldaDataReceiver implements TabldaDataInterface
             ->setTable($tb['data_table'])
             ->setMaps($tb['field_maps']);
 
-        return app()->make(DataTableInterface::class, ['model' => $model]);
+        return app()->make(DataTableInterface::class, [
+            'model' => $model,
+            'case_sens' => !empty($this->settings['case_sens'])
+        ]);
     }
 
     /**
      * Get mappings from cache or build them.
      *
      * @param string $table
+     * @param bool $no_cache
      * @return mixed
      */
     private function getTableWithMaps(string $table, bool $no_cache = false)
@@ -138,7 +145,7 @@ class TabldaDataReceiver implements TabldaDataInterface
             ->first();
 
         if (!$app_table) {
-            throw new \Exception('Table not found in "CorrespondenceTables"');
+            throw new \Exception('Table "'.$table.'" not found in "CorrespondenceTables"');
         }
 
         $app_fields = DB::connection($this->connection_sys)
@@ -148,15 +155,29 @@ class TabldaDataReceiver implements TabldaDataInterface
             ->whereNotNull('data_field')
             ->get();
 
-        $maps = ['ID' => 'id'];
+        $maps = ['_id' => 'id'];
         foreach ($app_fields as $app_field) {
-            $maps[strtolower($app_field->app_field)] = strtolower($app_field->data_field);
+            $maps[ $this->t_case($app_field->app_field) ] = $this->t_case($app_field->data_field);
         }
 
         return [
             'data_table' => $app_table->data_table,
             'field_maps' => $maps,
         ];
+    }
+
+    /**
+     * Case sensitive or not.
+     *
+     * @param string $val
+     * @return string
+     */
+    private function t_case(string $val)
+    {
+        if (!empty($this->settings['case_sens'])) {
+            $val = strtolower($val);
+        }
+        return $val;
     }
 
     /**

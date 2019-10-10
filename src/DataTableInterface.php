@@ -8,8 +8,9 @@ interface DataTableInterface
     /**
      * DataTableInterface constructor.
      * @param TabldaTable $model
+     * @param $case_sens
      */
-    public function __construct(TabldaTable $model);
+    public function __construct(TabldaTable $model, $case_sens);
 
     /**
      * @return void

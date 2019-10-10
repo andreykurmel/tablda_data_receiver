@@ -8,13 +8,16 @@ class DataTableReceiver implements DataTableInterface
 {
     protected $model;
     protected $builder;
+    protected $case_sens;
 
     /**
      * DataTableReceiver constructor.
      * @param TabldaTable $model
+     * @param null $case_sens
      */
-    public function __construct(TabldaTable $model)
+    public function __construct(TabldaTable $model, $case_sens = null)
     {
+        $this->case_sens = $case_sens;
         $this->model = $model;
         $this->clearQuery();
     }
@@ -140,9 +143,9 @@ class DataTableReceiver implements DataTableInterface
         $maps = $this->model->getMaps();
         $mapped_data = [];
         foreach ($input as $key => $val) {
-            $mapper = $maps[ strtolower($key) ] ?? null;
+            $mapper = $maps[ $this->t_case($key) ] ?? null;
             if ($mapper) {
-                $mapped_data[ strtolower($mapper) ] = $val;
+                $mapped_data[ $this->t_case($mapper) ] = $val;
             }
         }
         return $mapped_data;
@@ -157,11 +160,25 @@ class DataTableReceiver implements DataTableInterface
      */
     private function map_column(string $column) {
         $maps = $this->model->getMaps();
-        $mapped = $maps[ strtolower($column) ] ?? null;
+        $mapped = $maps[ $this->t_case($column) ] ?? null;
         if (!$mapped) {
-            throw new \Exception('Column not present in CorrespondenceFields');
+            throw new \Exception('Column "'.$column.'" not present in CorrespondenceFields');
         }
-        return strtolower($mapped);
+        return $this->t_case($mapped);
+    }
+
+    /**
+     * Case sensitive or not.
+     *
+     * @param string $val
+     * @return string
+     */
+    private function t_case(string $val)
+    {
+        if ($this->case_sens) {
+            $val = strtolower($val);
+        }
+        return $val;
     }
 
 
