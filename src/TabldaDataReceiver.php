@@ -72,6 +72,7 @@ class TabldaDataReceiver implements TabldaDataInterface
         $this->app->_tables = DB::connection($this->connection_sys)
             ->table($this->tables_tb)
             ->where('correspondence_app_id', $this->app->id)
+            ->where('active', 1)
             ->get()
             ->toArray();
     }
@@ -142,6 +143,7 @@ class TabldaDataReceiver implements TabldaDataInterface
             ->table($this->tables_tb)
             ->where('correspondence_app_id', $this->app->id)
             ->where('app_table', $table)
+            ->where('active', 1)
             ->first();
 
         if (!$app_table) {
