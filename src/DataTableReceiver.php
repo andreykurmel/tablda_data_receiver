@@ -57,7 +57,20 @@ class DataTableReceiver implements DataTableInterface
     public function whereIn($column, $values, $boolean = 'and', $not = false)
     {
         $mapped = $this->map_column($column);
-        $this->builder->where($column, $values, $boolean, $not);
+        $this->builder->whereIn($mapped, $values, $boolean, $not);
+        return $this;
+    }
+
+    /**
+     * Add a "group by" clause to the query.
+     *
+     * @param  string $column
+     * @return $this
+     */
+    public function groupBy($column)
+    {
+        $mapped = $this->map_column($column);
+        $this->builder->groupBy($mapped);
         return $this;
     }
 
