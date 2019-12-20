@@ -36,6 +36,24 @@ interface DataTableInterface
     public function whereIn($column, $values, $boolean = 'and', $not = false);
 
     /**
+     * @param $column
+     * @return $this
+     */
+    public function groupBy($column);
+
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function offset($value);
+
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function limit($value);
+
+    /**
      * @return $this
      */
     public function distinct();

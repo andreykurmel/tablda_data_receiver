@@ -75,6 +75,30 @@ class DataTableReceiver implements DataTableInterface
     }
 
     /**
+     * Add a "offset" to the query.
+     *
+     * @param  int $value
+     * @return $this
+     */
+    public function offset($value)
+    {
+        $this->builder->offset($value);
+        return $this;
+    }
+
+    /**
+     * Add a "limit" to the query.
+     *
+     * @param  int $value
+     * @return $this
+     */
+    public function limit($value)
+    {
+        $this->builder->limit($value);
+        return $this;
+    }
+
+    /**
      * Set Distinct to the query.
      *
      * @return $this
