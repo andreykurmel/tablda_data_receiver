@@ -176,7 +176,7 @@ class DataTableReceiver implements DataTableInterface
      * @param array $input
      * @return array
      */
-    private function map_data(array $input) {
+    protected function map_data(array $input) {
         $maps = $this->model->getMaps();
         $mapped_data = [];
         foreach ($input as $key => $val) {
@@ -195,7 +195,7 @@ class DataTableReceiver implements DataTableInterface
      * @return null
      * @throws \Exception
      */
-    private function map_column(string $column) {
+    protected function map_column(string $column) {
         $maps = $this->model->getMaps();
         $mapped = $maps[ $this->t_case($column) ] ?? null;
         if (!$mapped) {
@@ -210,7 +210,7 @@ class DataTableReceiver implements DataTableInterface
      * @param string $val
      * @return string
      */
-    private function t_case(string $val)
+    protected function t_case(string $val)
     {
         if ($this->case_sens) {
             $val = strtolower($val);

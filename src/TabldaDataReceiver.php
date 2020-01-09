@@ -38,7 +38,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      *
      * @throws \Exception
      */
-    private function setSettings()
+    protected function setSettings()
     {
         $this->connection_sys = env('TABLDA_SYS_CONN');
         $this->connection_data = env('TABLDA_DATA_CONN');
@@ -57,7 +57,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      *
      * @throws \Exception
      */
-    private function setAppRecord()
+    protected function setAppRecord()
     {
         $app_name = $this->settings['TABLDA_APP_NAME'] ?? env('TABLDA_APP_NAME');
         $this->app = DB::connection($this->connection_sys)
@@ -82,7 +82,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      *
      * @throws \Exception
      */
-    private function configDataConnection()
+    protected function configDataConnection()
     {
         $data = $this->connection_data;
         config([
@@ -121,7 +121,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      * @param bool $no_cache
      * @return mixed
      */
-    private function getTableWithMaps(string $table, bool $no_cache = false)
+    protected function getTableWithMaps(string $table, bool $no_cache = false)
     {
         if ($no_cache || empty($this->tables_cache[$table])) {
             $this->tables_cache[$table] = $this->buildMaps($table);
@@ -137,7 +137,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      * @return array
      * @throws \Exception
      */
-    private function buildMaps(string $table)
+    protected function buildMaps(string $table)
     {
         $app_table = DB::connection($this->connection_sys)
             ->table($this->tables_tb)
@@ -174,7 +174,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      * @param string $val
      * @return string
      */
-    private function t_case(string $val)
+    protected function t_case(string $val)
     {
         if (!empty($this->settings['case_sens'])) {
             $val = strtolower($val);
