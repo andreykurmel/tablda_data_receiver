@@ -70,6 +70,16 @@ interface DataTableInterface
     public function get();
 
     /**
+     * @return array
+     */
+    public function first();
+
+    /**
+     * @return integer
+     */
+    public function count();
+
+    /**
      * @param array $data
      * @return int
      */

@@ -137,6 +137,28 @@ class DataTableReceiver implements DataTableInterface
     }
 
     /**
+     * Get Data Count.
+     *
+     * @return integer
+     */
+    public function count()
+    {
+        return $this->builder->count();
+    }
+
+    /**
+     * Get First Row.
+     *
+     * @return array
+     */
+    public function first()
+    {
+        $model = $this->builder->first();
+        $model->setMaps( $this->model->getMaps() );
+        return $model->toArray();
+    }
+
+    /**
      * Insert Row.
      *
      * @param array $data
