@@ -149,13 +149,17 @@ class DataTableReceiver implements DataTableInterface
     /**
      * Get First Row.
      *
-     * @return array
+     * @return array|null
      */
     public function first()
     {
         $model = $this->builder->first();
-        $model->setMaps( $this->model->getMaps() );
-        return $model->toArray();
+        if ($model) {
+            $model->setMaps( $this->model->getMaps() );
+            return $model->toArray();
+        } else {
+            return null;
+        }
     }
 
     /**
