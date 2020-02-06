@@ -119,7 +119,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      *
      * @param string $app_table
      * @param bool $no_cache
-     * @return mixed
+     * @return array
      */
     public function getTableWithMaps(string $app_table, bool $no_cache = false)
     {
@@ -164,7 +164,7 @@ class TabldaDataReceiver implements TabldaDataInterface
 
         $app_table->_app_fields = $app_fields;
         $app_table->_app_maps = $maps;
-        return $app_table->toArray();
+        return (array)$app_table;
     }
 
     /**
