@@ -244,5 +244,15 @@ class DataTableReceiver implements DataTableInterface
         return $val;
     }
 
+    /**
+     * Get Model's Maps.
+     *
+     * @return array
+     */
+    public function getMaps()
+    {
+        return $this->model->getMaps();
+    }
+
 
 }

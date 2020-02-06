@@ -96,17 +96,17 @@ class TabldaDataReceiver implements TabldaDataInterface
     /**
      * Get Query with field mapping.
      *
-     * @param string $table
+     * @param string $app_table
      * @return DataTableReceiver
      */
-    public function tableReceiver(string $table)
+    public function tableReceiver(string $app_table)
     {
-        $tb = $this->getTableWithMaps($table);
+        $tb = $this->getTableWithMaps($app_table);
 
         $model = (new TabldaTable())
             ->setConnection($this->connection_data)
             ->setTable($tb['data_table'])
-            ->setMaps($tb['field_maps']);
+            ->setMaps($tb['_app_maps']);
 
         return app()->make(DataTableInterface::class, [
             'model' => $model,
@@ -117,17 +117,17 @@ class TabldaDataReceiver implements TabldaDataInterface
     /**
      * Get mappings from cache or build them.
      *
-     * @param string $table
+     * @param string $app_table
      * @param bool $no_cache
      * @return mixed
      */
-    protected function getTableWithMaps(string $table, bool $no_cache = false)
+    public function getTableWithMaps(string $app_table, bool $no_cache = false)
     {
-        if ($no_cache || empty($this->tables_cache[$table])) {
-            $this->tables_cache[$table] = $this->buildMaps($table);
+        if ($no_cache || empty($this->tables_cache[$app_table])) {
+            $this->tables_cache[$app_table] = $this->tableAndMaps($app_table);
         }
 
-        return $this->tables_cache[$table];
+        return $this->tables_cache[$app_table];
     }
 
     /**
@@ -137,7 +137,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      * @return array
      * @throws \Exception
      */
-    protected function buildMaps(string $table)
+    protected function tableAndMaps(string $table)
     {
         $app_table = DB::connection($this->connection_sys)
             ->table($this->tables_tb)
@@ -162,10 +162,9 @@ class TabldaDataReceiver implements TabldaDataInterface
             $maps[ $this->t_case($app_field->app_field) ] = $this->t_case($app_field->data_field);
         }
 
-        return [
-            'data_table' => $app_table->data_table,
-            'field_maps' => $maps,
-        ];
+        $app_table->_app_fields = $app_fields;
+        $app_table->_app_maps = $maps;
+        return $app_table->toArray();
     }
 
     /**
