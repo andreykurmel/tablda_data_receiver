@@ -21,7 +21,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      * TabldaDataReceiver constructor.
      *
      * @param array $settings : [
-     *      'TABLDA_APP_NAME' => string // replace env('TABLDA_APP_NAME') if needed
+     *      '{SETTINGS NAME}' => string // replace env('{SETTINGS NAME}') if needed
      *      'case_sens' => bool // case sensitive field names or not
      * ]
      */
@@ -40,16 +40,16 @@ class TabldaDataReceiver implements TabldaDataInterface
      */
     protected function setSettings()
     {
-        $this->connection_sys = env('TABLDA_SYS_CONN');
-        $this->connection_data = env('TABLDA_DATA_CONN');
+        $this->connection_sys = $this->settings['TABLDA_SYS_CONN'] ?? env('TABLDA_SYS_CONN');
+        $this->connection_data = $this->settings['TABLDA_DATA_CONN'] ?? env('TABLDA_DATA_CONN');
 
         if (!$this->connection_sys || !$this->connection_data) {
             throw new \Exception('Settings for Tablda connections not found.');
         }
 
-        $this->apps_tb = env('TABLDA_APPS_TB', 'correspondence_apps');
-        $this->tables_tb = env('TABLDA_TABLES_TB', 'correspondence_tables');
-        $this->fields_tb = env('TABLDA_FIELDS_TB', 'correspondence_fields');
+        $this->apps_tb = $this->settings['TABLDA_APPS_TB'] ?? env('TABLDA_APPS_TB', 'correspondence_apps');
+        $this->tables_tb = $this->settings['TABLDA_TABLES_TB'] ?? env('TABLDA_TABLES_TB', 'correspondence_tables');
+        $this->fields_tb = $this->settings['TABLDA_FIELDS_TB'] ?? env('TABLDA_FIELDS_TB', 'correspondence_fields');
     }
 
     /**
