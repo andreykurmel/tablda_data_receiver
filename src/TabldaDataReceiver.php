@@ -157,7 +157,10 @@ class TabldaDataReceiver implements TabldaDataInterface
             ->whereNotNull('data_field')
             ->get();
 
-        $maps = ['_id' => 'id'];
+        $maps = [
+            '_id' => 'id',
+            '_row_hash' => 'row_hash'
+        ];
         foreach ($app_fields as $app_field) {
             $maps[ $this->t_case($app_field->app_field) ] = $this->t_case($app_field->data_field);
         }
