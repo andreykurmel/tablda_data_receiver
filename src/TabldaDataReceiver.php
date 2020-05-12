@@ -13,6 +13,11 @@ class TabldaDataReceiver implements TabldaDataInterface
     protected $tables_tb;
     protected $fields_tb;
 
+    protected $def_host;
+    protected $def_db;
+    protected $def_login;
+    protected $def_pass;
+
     protected $app;
     protected $tables_cache = [];
     protected $settings = [];
@@ -21,7 +26,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      * TabldaDataReceiver constructor.
      *
      * @param array $settings : [
-     *      '{SETTINGS NAME}' => string // replace env('{SETTINGS NAME}') if needed
+     *      '{SETTINGS NAME}' => string // usually have default values
      *      'case_sens' => bool // case sensitive field names or not
      * ]
      */
@@ -40,16 +45,21 @@ class TabldaDataReceiver implements TabldaDataInterface
      */
     protected function setSettings()
     {
-        $this->connection_sys = $this->settings['TABLDA_SYS_CONN'] ?? env('TABLDA_SYS_CONN');
-        $this->connection_data = $this->settings['TABLDA_DATA_CONN'] ?? env('TABLDA_DATA_CONN');
+        $this->connection_sys = $this->settings['TABLDA_SYS_CONN'] ?? 'app_sys';
+        $this->connection_data = $this->settings['TABLDA_DATA_CONN'] ?? 'app_data';
 
         if (!$this->connection_sys || !$this->connection_data) {
             throw new \Exception('Settings for Tablda connections not found.');
         }
 
-        $this->apps_tb = $this->settings['TABLDA_APPS_TB'] ?? env('TABLDA_APPS_TB', 'correspondence_apps');
-        $this->tables_tb = $this->settings['TABLDA_TABLES_TB'] ?? env('TABLDA_TABLES_TB', 'correspondence_tables');
-        $this->fields_tb = $this->settings['TABLDA_FIELDS_TB'] ?? env('TABLDA_FIELDS_TB', 'correspondence_fields');
+        $this->apps_tb = $this->settings['TABLDA_APPS_TB'] ?? 'correspondence_apps';
+        $this->tables_tb = $this->settings['TABLDA_TABLES_TB'] ?? 'correspondence_tables';
+        $this->fields_tb = $this->settings['TABLDA_FIELDS_TB'] ?? 'correspondence_fields';
+
+        $this->def_host = $this->settings['DEF_HOST'] ?? '127.0.0.1';
+        $this->def_db = $this->settings['DEF_HOST'] ?? 'app_correspondence';
+        $this->def_login = $this->settings['DEF_HOST'] ?? 'root';
+        $this->def_pass = $this->settings['DEF_HOST'] ?? '';
     }
 
     /**
@@ -59,7 +69,7 @@ class TabldaDataReceiver implements TabldaDataInterface
      */
     protected function setAppRecord()
     {
-        $app_name = $this->settings['TABLDA_APP_NAME'] ?? env('TABLDA_APP_NAME');
+        $app_name = $this->settings['TABLDA_APP_NAME'];
         $this->app = DB::connection($this->connection_sys)
             ->table($this->apps_tb)
             ->where('code', $app_name)
@@ -86,10 +96,10 @@ class TabldaDataReceiver implements TabldaDataInterface
     {
         $data = $this->connection_data;
         config([
-            "database.connections.$data.host" => ($this->app->host ?: env('DB_HOST', '127.0.0.1')),
-            "database.connections.$data.database" => ($this->app->db ?: ''),
-            "database.connections.$data.username" => ($this->app->login ?: env('DB_USERNAME', 'root')),
-            "database.connections.$data.password" => ($this->app->pass ?: env('DB_PASSWORD', '')),
+            "database.connections.$data.host" => ($this->app->host ?: $this->def_host),
+            "database.connections.$data.database" => ($this->app->db ?: $this->def_db),
+            "database.connections.$data.username" => ($this->app->login ?: $this->def_login),
+            "database.connections.$data.password" => ($this->app->pass ?: $this->def_pass),
         ]);
     }
 
