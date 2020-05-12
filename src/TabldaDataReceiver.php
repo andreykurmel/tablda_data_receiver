@@ -57,9 +57,9 @@ class TabldaDataReceiver implements TabldaDataInterface
         $this->fields_tb = $this->settings['TABLDA_FIELDS_TB'] ?? 'correspondence_fields';
 
         $this->def_host = $this->settings['DEF_HOST'] ?? '127.0.0.1';
-        $this->def_db = $this->settings['DEF_HOST'] ?? 'app_correspondence';
-        $this->def_login = $this->settings['DEF_HOST'] ?? 'root';
-        $this->def_pass = $this->settings['DEF_HOST'] ?? '';
+        $this->def_db = $this->settings['DEF_DB'] ?? 'app_correspondence';
+        $this->def_login = $this->settings['DEF_LOGIN'] ?? 'root';
+        $this->def_pass = $this->settings['DEF_PASS'] ?? '';
     }
 
     /**
