@@ -154,7 +154,10 @@ class TabldaDataReceiver implements TabldaDataInterface
             ->where('correspondence_app_id', $this->app->id)
             ->where('app_table', $table)
             ->whereNotNull('data_table')
-            ->where('row_hash', '!=', 'cf_temp')
+            ->where(function ($q) {
+                $q->whereNotIn('row_hash', ['cf_temp']);
+                $q->orWhereNull('row_hash');
+            })
             ->where('active', 1)
             ->first();
 
@@ -168,7 +171,10 @@ class TabldaDataReceiver implements TabldaDataInterface
             ->where('correspondence_table_id', $app_table->id)
             ->whereNotNull('app_field')
             ->whereNotNull('data_field')
-            ->where('row_hash', '!=', 'cf_temp')
+            ->where(function ($q) {
+                $q->whereNotIn('row_hash', ['cf_temp']);
+                $q->orWhereNull('row_hash');
+            })
             ->get();
 
         $maps = [
